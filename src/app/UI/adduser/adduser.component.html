@@ -1,3 +1,89 @@
-<p>
-  adduser works!
-</p>
+<div class="container">
+  <table class="table">
+    <tr>
+      <td>
+        First Name:
+      </td>
+      <td>
+        <input type="text" id="usrFirstNm" style="width:60%" />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Last Name:
+      </td>
+      <td>
+        <input type="text" id="usrLastNm" style="width:60%" />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Employee ID:
+      </td>
+      <td>
+        <input type="text" id="usrEmpId" style="width:30%" />
+      </td>
+    </tr>
+    <tr>
+      <td>
+      </td>
+      <td>
+        <div style="width:60%;text-align:right">
+          <button type="button" id="btnAddUser" class="btn btn-primary">Add</button>
+          &nbsp;&nbsp;
+          <button type="button" id="btnResUser" class="btn btn-secondary">Reset</button>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div style="width:92%;">
+          <input type="text" id="srchProject" style="width:25%" placeholder="Search..." />
+          &nbsp;&nbsp;
+          <div style="width:50%;float:right">
+            Sort :
+            <button type="button" id="btnSortUsrFNm" class="btn btn-primary">First Name</button> &nbsp;&nbsp;
+            <button type="button" id="btnSortUsrLNm" class="btn btn-primary">Last Name</button> &nbsp;&nbsp;
+            <button type="button" id="btnSortUsrId" class="btn btn-primary">Id</button> &nbsp;&nbsp;
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div style="width:78%">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <div>
+                <table class="table">
+                  <tr>
+                    <td>
+                      <span id="usrFirstNm"></span>
+                    </td>
+                    <td style="float: right">
+                      <button type="button" style="width:90px;" id="btnusrEdit" class="btn btn-primary">Edit</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span id="usrLastNm"></span>
+                    </td>
+                    <td style="float: right">
+                      <button type="button" style="width:90px;" id="btnusrDel" class="btn btn-danger">Delete</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span id="usrEmpId"></span>
+                    </td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
