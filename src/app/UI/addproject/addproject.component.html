@@ -1,3 +1,112 @@
-<p>
-  addproject works!
-</p>
+<div class="container">
+  <table class="table">
+    <tr>
+      <td>
+        Project:
+      </td>
+      <td>
+        <input type="text" id="prjName" style="width:60%" />
+      </td>
+    </tr>
+    <tr>
+      <td>
+      </td>
+      <td>
+        <input type="checkbox" name="chkSetDate" id="chkSetDate" />
+        &nbsp;<label for="chkSetDate"> Set Start and End Date</label>
+        &nbsp;&nbsp;<input type="date" disabled="true" id="prjStrtDt" placeholder="Start Date" />
+        &nbsp; &nbsp; &nbsp;<input type="date" disabled="true" id="prjEndDt" placeholder="End Date" />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Priority:
+      </td>
+      <td>
+        <span>0 </span>
+        <input type="range" id="prjPriority" name="Priority" style="width:60%" min="0" max="30" value="25" />
+        <span>30 </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Manager:
+      </td>
+      <td>
+        <input type="text" id="prjManager" style="width:50%" />
+        &nbsp;&nbsp;
+        <button type="button" id="btnMngrSrch" class="btn btn-primary" style="border-radius:50%">Search</button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+      </td>
+      <td>
+        <div style="width:60%;text-align:right">
+          <button type="button" id="btnAddPrj" class="btn btn-primary">Add</button>
+          &nbsp;&nbsp;
+          <button type="button" id="btnAddPrj" class="btn btn-secondary">Reset</button>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <input type="text" id="srchProject" style="width:65%" placeholder="Search..." />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Sort By:
+      </td>
+      <td>
+        <button type="button" id="btnSortStrtDt" class="btn btn-primary">Start Date</button> &nbsp;&nbsp;
+        <button type="button" id="btnSortEndDt" class="btn btn-primary">End Date</button> &nbsp;&nbsp;
+        <button type="button" id="btnSortPri" class="btn btn-primary">Priority</button> &nbsp;&nbsp;
+        <button type="button" id="btnSortCmp" class="btn btn-primary">Completed</button> &nbsp;&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div style="width:65%">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <div >
+                <table class="table">
+                  <tr>
+                    <td colspan="2">
+                      Project: <span id="prjName"></span>
+                    </td>
+                    <td>
+                      Priority: <span id="prjPri"></span>
+                    </td>
+                    <td>
+                      <button type="button" id="btnprjUpdt" class="btn btn-primary">Update</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      No of Tasks:
+                      <br />
+                      <br />
+                      Start Date:
+                    </td>
+                    <td>
+                      Completed:
+                      <br />
+                      <br />
+                      End Date:
+                    </td>
+                    <td></td>
+                    <td>
+                      <button type="button" id="btnprjSus" class="btn btn-secondary">Suspend</button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
