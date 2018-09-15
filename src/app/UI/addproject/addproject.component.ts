@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Project } from '../Model/Project';
 import {DatePipe} from '@angular/common';
+import { Project } from '../../Model/Project';
 //declare var $:any;
 @Component({
     selector: 'app-addproject',
