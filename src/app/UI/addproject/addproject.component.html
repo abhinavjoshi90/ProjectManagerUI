@@ -1,112 +1,145 @@
 <div class="container">
-  <table class="table">
-    <tr>
-      <td>
-        Project:
-      </td>
-      <td>
-        <input type="text" id="prjName" style="width:60%" />
-      </td>
-    </tr>
-    <tr>
-      <td>
-      </td>
-      <td>
-        <input type="checkbox" name="chkSetDate" id="chkSetDate" />
-        &nbsp;<label for="chkSetDate"> Set Start and End Date</label>
-        &nbsp;&nbsp;<input type="date" disabled="true" id="prjStrtDt" placeholder="Start Date" />
-        &nbsp; &nbsp; &nbsp;<input type="date" disabled="true" id="prjEndDt" placeholder="End Date" />
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Priority:
-      </td>
-      <td>
-        <span>0 </span>
-        <input type="range" id="prjPriority" name="Priority" style="width:56%" min="0" max="30" value="25" />
-        <span>30 </span>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Manager:
-      </td>
-      <td>
-        <input type="text" id="prjManager" style="width:50%" />
-        &nbsp;&nbsp;
-        <button type="button" id="btnMngrSrch" class="btn btn-primary" style="border-radius:50%">Search</button>
-      </td>
-    </tr>
-    <tr>
-      <td>
-      </td>
-      <td>
-        <div style="width:60%;text-align:right">
-          <button type="button" id="btnAddPrj" class="btn btn-primary">Add</button>
+  <form #f="ngForm">
+    <table class="table">
+      <tr>
+        <td>
+          Project:
+        </td>
+        <td>
+          <input type="text" id="prjName" [(ngModel)]="projectObj.projectName" name="prjName " #prjName="ngModel" style="width:60%"
+            required />
+          <div style="float:right;width:35%;padding:initial;margin:initial" class="alert alert-danger" *ngIf="prjName.touched && !prjName.valid">Project
+            Name is required</div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <input type="checkbox" name="chkSetDate" id="chkSetDate" (change)="checkChange();" [(ngModel)]="chkSetDateVal"
+            #chkSetDate="ngModel" />
+          &nbsp;<label for="chkSetDate"> Set Start and End Date</label>
+          &nbsp;<input type="date" [disabled]="!chkSetDateVal" [ngModel]="today|date:'yyyy-MM-dd'" (ngModelChange)="today=$event; ValidateDate();"
+            id="prjStrtDt" name="prjStrtDt" />
+          &nbsp; &nbsp; &nbsp;<input type="date" [disabled]="!chkSetDateVal" id="prjEndDt" name="prjEndDt" [ngModel]="tomorrow|date:'yyyy-MM-dd'"
+            (ngModelChange)="tomorrow=$event;ValidateDate();" />
+
+          <div style="float:right;width:35%;padding:initial;margin:initial" class="alert alert-danger" *ngIf="!this.dateIsValid">Please
+            correct the dates</div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Priority:
+        </td>
+        <td>
+          <span>0 </span>
+          <input type="range" id="prjPriority" name="Priority" style="width:56%" min="0" max="30" value="0" />
+          <span>30 </span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Manager:
+        </td>
+        <td>
+          <input type="text" id="prjManager" style="width:50%" />
           &nbsp;&nbsp;
-          <button type="button" id="btnAddPrj" class="btn btn-secondary">Reset</button>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <input type="text" id="srchProject" style="width:65%" placeholder="Search..." />
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Sort By:
-      </td>
-      <td>
-        <button type="button" id="btnSortStrtDt" class="btn btn-primary">Start Date</button> &nbsp;&nbsp;
-        <button type="button" id="btnSortEndDt" class="btn btn-primary">End Date</button> &nbsp;&nbsp;
-        <button type="button" id="btnSortPri" class="btn btn-primary">Priority</button> &nbsp;&nbsp;
-        <button type="button" id="btnSortCmp" class="btn btn-primary">Completed</button> &nbsp;&nbsp;
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <div style="width:65%">
-          <ul class="list-group">
-            <li class="list-group-item">
-              <div>
-                <table class="table">
-                  <tr>
-                    <td colspan="2">
-                      Project: <span id="prjName"></span>
-                    </td>
-                    <td>
-                      Priority: <span id="prjPri"></span>
-                    </td>
-                    <td style="float: right">
-                      <button type="button" style="width:90px;" id="btnprjUpdt" class="btn btn-primary">Update</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      No of Tasks:
-                      <br />
-                      <br />
-                      Start Date:
-                    </td>
-                    <td>
-                      Completed:
-                      <br />
-                      <br />
-                      End Date:
-                    </td>
-                    <td></td>
-                    <td style="float: right">
-                      <button type="button" style="width:90px;" id="btnprjSus" class="btn btn-secondary">Suspend</button>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-  </table>
+          <button type="button" id="btnMngrSrch" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="border-radius:50%">Search</button>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <div style="width:60%;text-align:right">
+            <button type="button" id="btnAddPrj" class="btn btn-primary" [disabled]="!f.valid">Add</button>
+            &nbsp;&nbsp;
+            <button type="button" id="btnAddPrj" class="btn btn-secondary">Reset</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <input type="text" id="srchProject" style="width:65%" placeholder="Search..." />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Sort By:
+        </td>
+        <td>
+          <button type="button" id="btnSortStrtDt" class="btn btn-primary">Start Date</button> &nbsp;&nbsp;
+          <button type="button" id="btnSortEndDt" class="btn btn-primary">End Date</button> &nbsp;&nbsp;
+          <button type="button" id="btnSortPri" class="btn btn-primary">Priority</button> &nbsp;&nbsp;
+          <button type="button" id="btnSortCmp" class="btn btn-primary">Completed</button> &nbsp;&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <div style="width:65%">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <div>
+                  <table class="table">
+                    <tr>
+                      <td colspan="2">
+                        Project: <span id="prjName"></span>
+                      </td>
+                      <td>
+                        Priority: <span id="prjPri"></span>
+                      </td>
+                      <td style="float: right">
+                        <button type="button" style="width:90px;" id="btnprjUpdt" class="btn btn-primary">Update</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        No of Tasks:
+                        <br />
+                        <br />
+                        Start Date:
+                      </td>
+                      <td>
+                        Completed:
+                        <br />
+                        <br />
+                        End Date:
+                      </td>
+                      <td></td>
+                      <td style="float: right">
+                        <button type="button" style="width:90px;" id="btnprjSus" class="btn btn-secondary">Suspend</button>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </form>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
