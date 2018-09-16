@@ -1,27 +1,35 @@
 <div class="container">
+  <form #f="ngForm">
   <table class="table">
     <tr>
-      <td>
+      <td style="width:20%">
         First Name:
       </td>
-      <td>
-        <input type="text" id="usrFirstNm" style="width:60%" />
+      <td style="width:60%">
+        <input type="text" id="usrFirstNm" style="width:500px;" name="usrFirstNm" #firstName="ngModel" [(ngModel)]="firstNm"  required/>
+        <div style="float:right;width:35%;padding:initial;margin:initial" class="alert alert-danger" *ngIf="firstName.touched && !firstName.valid">First
+            Name is required</div>
+          <br>
       </td>
     </tr>
     <tr>
-      <td>
+      <td style="width:20%">
         Last Name:
       </td>
-      <td>
-        <input type="text" id="usrLastNm" style="width:60%" />
+      <td style="width:60%">
+        <input type="text" id="usrLastNm" style="width:500px;" name="usrLadtNm" #lastName="ngModel" [(ngModel)]="lastNm"  required />
+        <div style="float:right;width:35%;padding:initial;margin:initial" class="alert alert-danger" *ngIf="lastName.touched && !lastName.valid">Last
+            Name is required</div>
       </td>
     </tr>
     <tr>
-      <td>
-        Employee ID:
+      <td style="width:20%">
+        Employee ID:        
       </td>
       <td>
-        <input type="text" id="usrEmpId" style="width:30%" />
+        <input type="text" id="usrEmpId" name="usrEmpId" #eId="ngModel" [(ngModel)]="empId" style="width:150px;" required/>
+        <div style="float:right;width:35%;padding:initial;margin:initial" class="alert alert-danger" *ngIf="eId.touched && !eId.valid">Employee
+            ID is required</div>
       </td>
     </tr>
     <tr>
@@ -29,7 +37,7 @@
       </td>
       <td>
         <div style="width:60%;text-align:right">
-          <button type="button" id="btnAddUser" class="btn btn-primary">Add</button>
+          <button type="button" id="btnAddUser" [disabled]="!f.valid" class="btn btn-primary">Add</button>
           &nbsp;&nbsp;
           <button type="button" id="btnResUser" class="btn btn-secondary">Reset</button>
         </div>
@@ -40,7 +48,7 @@
         <div style="width:92%;">
           <input type="text" id="srchProject" style="width:25%" placeholder="Search..." />
           &nbsp;&nbsp;
-          <div style="width:50%;float:right">
+          <div style="width:55%;float:right">
             Sort :
             <button type="button" id="btnSortUsrFNm" class="btn btn-primary">First Name</button> &nbsp;&nbsp;
             <button type="button" id="btnSortUsrLNm" class="btn btn-primary">Last Name</button> &nbsp;&nbsp;
@@ -51,7 +59,7 @@
     </tr>
     <tr>
       <td colspan="2">
-        <div style="width:78%">
+        <div style="width:74%">
           <ul class="list-group">
             <li class="list-group-item">
               <div>
@@ -86,4 +94,5 @@
       </td>
     </tr>
   </table>
+</form>
 </div>

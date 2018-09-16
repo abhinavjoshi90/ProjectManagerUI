@@ -6,9 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./adduser.component.css']
 })
 export class AdduserComponent implements OnInit {
-
+  
+  firstNm:string;
+  lastNm:string;
+  empId:number;
   constructor() { }
-
+ 
   ngOnInit() {
   }
 
