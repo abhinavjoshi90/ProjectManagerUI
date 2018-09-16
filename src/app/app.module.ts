@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import {DatePipe} from '@angular/common';
 import { AppComponent } from './app.component';
 import { AddprojectComponent } from './UI/addproject/addproject.component';
 import { AddtaskComponent } from './UI/addtask/addtask.component';
@@ -23,7 +23,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     FormsModule,
     ReactiveFormsModule
   ], 
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

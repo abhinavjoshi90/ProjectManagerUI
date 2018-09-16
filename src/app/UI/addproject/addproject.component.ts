@@ -16,10 +16,16 @@ export class AddprojectComponent implements OnInit {
     dateIsValid: boolean=true;
     today: Date;
     tomorrow: Date;
+    lstItem:string[];
+    //lstItems:ListItem[];
+    selectedManagerNm:string;
+    Manager:string;
     constructor( private _datePipe:DatePipe) {
         this.chkSetDateVal = false;
-
-        //this.projectObj.projectName="Project 1";
+      
+        //this.projectObj.projectName="Project 1"; 
+        this.selectedManagerNm="";
+      //  this.lstItems=[{ selected:false, Name:"Abhinav"},{ selected:false,Name:"Manish"}];
     }
 
     ngOnInit() {
@@ -49,7 +55,23 @@ export class AddprojectComponent implements OnInit {
         console.log(this.dateIsValid);
     }
     
-    // openModal(){
-    //   $('#exampleModal').modal('show');
-    //   }
+    onSelection(){
+        if(this.selectedManagerNm.length>0){
+            this.Manager=this.selectedManagerNm;
+        }
+        console.log('on selection');
+    }
+    handleChange(evt){ 
+    this.selectedManagerNm=evt;
+    console.log(evt);
+  } 
+
+  onSearchClick(){
+    this.lstItem=["Abhinav","Manish","Vivek","Deepak","Akash","Gaurav","Shreyas","Amit"];
+  }
 }
+
+/* export class ListItem{
+     selected:boolean=false;
+     Name:string;
+} */
