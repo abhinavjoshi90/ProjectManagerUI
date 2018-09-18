@@ -8,7 +8,7 @@ import { AdduserComponent } from './UI/adduser/adduser.component';
 import { ViewtaskComponent } from './UI/viewtask/viewtask.component';
 import { routing } from 'src/app/app.router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,7 +21,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     BrowserModule,
     routing,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule 
   ], 
   providers: [DatePipe],
   bootstrap: [AppComponent]
