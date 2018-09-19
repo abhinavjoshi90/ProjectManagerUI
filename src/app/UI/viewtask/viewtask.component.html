@@ -22,7 +22,7 @@
   </table>
   <div>
     <ul class="list-group">
-      <li class="list-group-item">
+      <li class="list-group-item" *ngFor="let obj of lstTasks">
         <div>
           <table class="table">
             <tr>
@@ -46,19 +46,19 @@
             </tr>
             <tr>
               <td style="width:20%">
-                <span id="vwTskTskNM"></span>
+                <span id="vwTskTskNM">{{obj.TaskName}}</span>
               </td>
               <td style="width:20%">
-                <span id="vwTskPrntNM"></span>
+                <span id="vwTskPrntNM">{{obj.ParentTaskName}}</span>
               </td>
               <td style="width:10%">
-                <span id="vwTskPri"></span>
+                <span id="vwTskPri">{{obj.Priority}}</span>
               </td>
               <td style="width:15%">
-                <span id="vwTskStrtDt"></span>
+                <span id="vwTskStrtDt">{{obj.StartDate | date:'yyyy-MM-dd'}}</span>
               </td>
               <td style="width:15%">
-                <span id="vwTskEndDt"></span>
+                <span id="vwTskEndDt">{{obj.EndDate | date:'yyyy-MM-dd'}}</span>
               </td>
               <td style="width:20%">
                 <button type="button" style="width:75px;" id="btnEditTsk" class="btn btn-primary">Edit</button>

@@ -78,16 +78,16 @@
       <tr>
         <td colspan="2">
           <div style="width:65%">
-            <ul class="list-group">
-              <li class="list-group-item">
+            <ul class="list-group" >
+              <li class="list-group-item" *ngFor="let obj of lstprojects">
                 <div>
                   <table class="table">
                     <tr>
                       <td colspan="2">
-                        Project: <span id="prjName"></span>
+                        Project: <span id="prjName">{{obj.ProjectName}}</span>
                       </td>
                       <td>
-                        Priority: <span id="prjPri"></span>
+                        Priority: <span id="prjPri">{{obj.Priority}}</span>
                       </td>
                       <td style="float: right">
                         <button type="button" style="width:90px;" id="btnprjUpdt" class="btn btn-primary">Update</button>
@@ -95,16 +95,16 @@
                     </tr>
                     <tr>
                       <td>
-                        No of Tasks:
+                        No of Tasks: <span>{{obj.NoOfTasks}}</span>
                         <br />
                         <br />
-                        Start Date:
+                        Start Date:<span>{{obj.StartDate|date:'yyyy-MM-dd'}}</span>
                       </td>
                       <td>
-                        Completed:
+                        Completed:<span>{{obj.CompletedTasks}}</span>
                         <br />
                         <br />
-                        End Date:
+                        End Date:<span>{{obj.EndDate|date:'yyyy-MM-dd'}}</span>
                       </td>
                       <td></td>
                       <td style="float: right">
