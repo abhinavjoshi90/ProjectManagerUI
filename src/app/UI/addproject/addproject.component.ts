@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Project } from '../../Model/Project';
 import { ProjectService } from '../../Service/project.service';
+import { User } from '../../Model/User';
 //declare var $:any;
 @Component({
     selector: 'app-addproject',
@@ -11,70 +12,62 @@ import { ProjectService } from '../../Service/project.service';
 })
 export class AddprojectComponent implements OnInit {
 
-    // $:any;
     projectObj: Project = new Project();
     chkSetDateVal: boolean;
     dateIsValid: boolean = true;
-    today: Date;
-    tomorrow: Date;
-    lstItem: string[];
-    //lstItems:ListItem[];
-    selectedManagerNm: string;
+    lstItem: User[];
+    selectedManager: User;
     Manager: string;
     lstprojects: Project[];
-    constructor(private _datePipe: DatePipe, private _service: ProjectService) {
+    responseMsg:string;
+    constructor(private _datePipe: DatePipe, private _service: ProjectService) {       
         this.chkSetDateVal = false;
-
-        //this.projectObj.projectName="Project 1"; 
-        this.selectedManagerNm = "";
-        //  this.lstItems=[{ selected:false, Name:"Abhinav"},{ selected:false,Name:"Manish"}];
-        this._service.getallProjects().subscribe(res => this.lstprojects = res);
+        this.selectedManager = new User();    
+        this.getAllProjects();
     }
 
+    getAllProjects(){
+        this._service.getallProjects().subscribe(res => this.lstprojects = res);
+    }
     ngOnInit() {
     }
     checkChange() {
-        // console.log(control);
         this.dateIsValid = true;
-        this.today = null;
-        this.tomorrow = null;
+        this.projectObj.StartDate = null;
+        this.projectObj.EndDate = null;
         if (this.chkSetDateVal) {
-            this.today = new Date();
-            this.tomorrow = new Date();
-            this.today.setDate(this.today.getDate());
-            this.tomorrow.setDate(this.today.getDate() + 1);
-            //  this.today=this._datePipe.transform(this.today,'yyyy-MM-dd').toString();
-            // console.log(this._datePipe.transform(this.today,'yyyy-MM-dd')+ ' ' +this.tomorrow);
-            //  console.log(this._datePipe.transform(this.today,'yyyy-MM-dd') <= this._datePipe.transform(this.tomorrow,'yyyy-MM-dd'));
+            this.projectObj.StartDate = new Date();
+            this.projectObj.EndDate = new Date();
+            this.projectObj.StartDate.setDate(this.projectObj.StartDate.getDate());
+            this.projectObj.EndDate.setDate(this.projectObj.StartDate.getDate() + 1);
         }
     }
     ValidateDate() {
         console.log('validate date');
         this.dateIsValid = false;
-        //  console.log(this.today.toString()+ ' ' +this.tomorrow);
-        if (this._datePipe.transform(this.today, 'yyyy-MM-dd') <= this._datePipe.transform(this.tomorrow, 'yyyy-MM-dd')) {
+        if (this._datePipe.transform(this.projectObj.StartDate, 'yyyy-MM-dd') <= this._datePipe.transform(this.projectObj.EndDate, 'yyyy-MM-dd')) {
             this.dateIsValid = true;
         }
         console.log(this.dateIsValid);
     }
 
     onSelection() {
-        if (this.selectedManagerNm.length > 0) {
-            this.Manager = this.selectedManagerNm;
+        if (this.selectedManager.EmployeeId > 0) {
+            this.Manager = this.selectedManager.FirstName + " " + this.selectedManager.LastName;
+            this.projectObj.Manager = this.selectedManager;
         }
         console.log('on selection');
     }
     handleChange(evt) {
-        this.selectedManagerNm = evt;
+        this.selectedManager = evt;
         console.log(evt);
     }
 
     onSearchClick() {
-        this.lstItem = ["Abhinav", "Manish", "Vivek", "Deepak", "Akash", "Gaurav", "Shreyas", "Amit"];
+        this._service.getallUsers().subscribe(res => this.lstItem = res);
+    }
+
+    addProject(){
+        this._service.addProject(this.projectObj).subscribe(res => { this.responseMsg = res; this.getAllProjects(); });
     }
 }
-
-/* export class ListItem{
-     selected:boolean=false;
-     Name:string;
-} */

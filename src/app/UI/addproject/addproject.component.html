@@ -2,7 +2,10 @@
   <form #f="ngForm">
     <table class="table">
       <tr>
-        <td>
+        <td colspan="2">{{responseMsg}}</td>
+      </tr>
+      <tr>
+         <td>
           Project:
         </td>
         <td>
@@ -19,10 +22,10 @@
           <input type="checkbox" name="chkSetDate" id="chkSetDate" (change)="checkChange();" [(ngModel)]="chkSetDateVal"
             #chkSetDate="ngModel" />
           &nbsp;<label for="chkSetDate"> Set Start and End Date</label>
-          &nbsp;<input type="date" [disabled]="!chkSetDateVal" [ngModel]="today|date:'yyyy-MM-dd'" (ngModelChange)="today=$event; ValidateDate();"
+          &nbsp;<input type="date" [disabled]="!chkSetDateVal" [ngModel]="projectObj.StartDate|date:'yyyy-MM-dd'" (ngModelChange)="projectObj.StartDate=$event; ValidateDate();"
             id="prjStrtDt" name="prjStrtDt" />
-          &nbsp; &nbsp; &nbsp;<input type="date" [disabled]="!chkSetDateVal" id="prjEndDt" name="prjEndDt" [ngModel]="tomorrow|date:'yyyy-MM-dd'"
-            (ngModelChange)="tomorrow=$event;ValidateDate();" />
+          &nbsp; &nbsp; &nbsp;<input type="date" [disabled]="!chkSetDateVal" id="prjEndDt" name="prjEndDt" [ngModel]="projectObj.EndDate|date:'yyyy-MM-dd'"
+            (ngModelChange)="projectObj.EndDate=$event;ValidateDate();" />
 
           <div style="float:right;width:35%;padding:initial;margin:initial;" class="alert alert-danger" *ngIf="!this.dateIsValid">Please
             correct the dates</div>
@@ -34,7 +37,7 @@
         </td>
         <td>
           <span>0 </span>
-          <input type="range" id="prjPriority" name="Priority" style="width:56%" min="0" max="30" value="0" />
+          <input type="range" id="prjPriority" name="Priority" [(ngModel)]="projectObj.Priority" style="width:56%" min="0" max="30" />
           <span>30 </span>
         </td>
       </tr>
@@ -53,7 +56,7 @@
         </td>
         <td>
           <div style="width:60%;text-align:right">
-            <button type="button" id="btnAddPrj" class="btn btn-primary" [disabled]="(!f.valid || !this.dateIsValid)">Add</button>
+            <button type="button" id="btnAddPrj" class="btn btn-primary" (click)="addProject();" [disabled]="(!f.valid || !this.dateIsValid)">Add</button>
             &nbsp;&nbsp;
             <button type="button" id="btnAddPrj" class="btn btn-secondary">Reset</button>
           </div>
@@ -140,7 +143,7 @@
             </div>           
             <div class="row justify-content-center mt-3" *ngFor="let obj of lstItem">
               <input class="col-md-3" type="radio" name="rdlstItem" id="rdlstItem" (change)="handleChange(obj);" >
-              <span class="col-md-9" name="lbllstItem" id="lbllstItem">{{obj}}</span>
+              <span class="col-md-9" name="lbllstItem" id="lbllstItem">{{obj.FirstName}} {{obj.LastName}}</span>
             </div>
           </div>         
         </div>

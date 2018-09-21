@@ -4,6 +4,7 @@ import { User } from '../Model/User';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Task } from '../Model/Task';
+import { Project } from '../Model/Project';
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +25,17 @@ export class ProjectService {
 
   getallProjects(): Observable<any> {
     return this._http.get(this.apiBaseUrl + "getallprojects").pipe(map(res => res));
+  }
+
+  getallUsers():Observable<any>{
+    return this._http.get(this.apiBaseUrl+"getallusers").pipe(map(res => res));
+  }
+
+  addProject(obj:Project):Observable<any>{
+    return this._http.post(this.apiBaseUrl + "addproject", obj).pipe(map(res => res));
+  }
+
+  addTask(obj:Task):Observable<any>{
+    return this._http.post(this.apiBaseUrl + "addtask", obj).pipe(map(res => res));
   }
 }

@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { Project } from '../../Model/Project';
+import { ProjectService } from '../../Service/project.service';
+import { Task } from '../../Model/Task';
+import { User } from '../../Model/User';
 
 @Component({
   selector: 'app-addtask',
@@ -7,11 +11,12 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./addtask.component.css']
 })
 export class AddtaskComponent implements OnInit {
-  lstItem: string[];
+  taskObj: Task;
+  lstItem: ModelView[] = [];
   searchTitle: string;
-  selectedprojectName: string;
-  selectedparenttaskName: string;
-  selecteduserName: string;
+  selectedproject: Project;
+  selectedparenttask: Task;
+  selecteduser: User;
   projectName: string;
   parentTaskName: string;
   userName: string;
@@ -19,50 +24,90 @@ export class AddtaskComponent implements OnInit {
   taskName: string;
   isPrntTskChckd: boolean;
   dateIsValid: boolean = true;
-  startDt:Date;
-  endDt:Date;
- 
-  constructor(private _datePipe:DatePipe) {
+  startDt: Date;
+  endDt: Date;
+  lstProjects: Project[];
+  lstUsers: User[];
+  lstParentTask: Task[];
+  mv: ModelView;
+  responseMsg: string;
+  constructor(private _datePipe: DatePipe, private _service: ProjectService) {
     this.isPrntTskChckd = false;
     this.dateIsValid = true;
-    this.startDt = new Date();
-    this.endDt = new Date();
-    this.endDt.setDate(this.startDt.getDate() + 1);
+    this.taskObj = new Task();
+    this.taskObj.StartDate = new Date();
+    this.taskObj.EndDate = new Date();
+    this.taskObj.EndDate.setDate(this.taskObj.StartDate.getDate() + 1);
+    this.responseMsg = "";
   }
 
   ngOnInit() {
   }
 
   onPrjSearchClick() {
+    this.lstItem = [];
     this.searchId = 1;
     this.searchTitle = "Search Projects";
-    this.lstItem = ["Receivables Edge", "AON Carrier Link", "AON Bridge", "Remit One"];
+    this._service.getallProjects().subscribe(res => {
+      this.lstProjects = res;
+      this.lstProjects.forEach(project => {
+        this.mv = new ModelView();
+        this.mv.Name = project.ProjectName;
+        this.mv.Type = project;
+        this.lstItem.push(this.mv);
+        // console.log((project.ProjectName));
+      });
+    });
   }
   onPrntTskSearchClick() {
+    this.lstItem = [];
     this.searchId = 2;
     this.searchTitle = "Search Parent Tasks";
-    this.lstItem = ["E-Remittance", "Transmission", "Integrated Receivables", "Global VR"];
+    this._service.getallTasks().subscribe(res => {
+      this.lstParentTask = res;
+      this.lstParentTask.forEach(parntTask => {
+        if (parntTask.TaskID == 0) {
+          this.mv = new ModelView();
+          this.mv.Name = parntTask.ParentTaskName;
+          this.mv.Type = parntTask;
+          this.lstItem.push(this.mv);
+        }
+      });
+    });
+    //this.lstItem = ["E-Remittance", "Transmission", "Integrated Receivables", "Global VR"];
   }
   onUserSearchClick() {
+    this.lstItem = [];
     this.searchId = 3;
     this.searchTitle = "Search Users";
-    this.lstItem = ["Abhinav", "Manish", "Vivek", "Deepak", "Akash", "Gaurav", "Shreyas", "Amit"];
+    this._service.getallUsers().subscribe(res => {
+      this.lstUsers = res;
+      this.lstUsers.forEach(user => {
+        this.mv = new ModelView();
+        this.mv.Name = user.FirstName + " " + user.LastName;
+        this.mv.Type = user;
+        this.lstItem.push(this.mv);
+        // console.log((project.ProjectName));
+      });
+
+    });
+    // this.lstItem = ["Abhinav", "Manish", "Vivek", "Deepak", "Akash", "Gaurav", "Shreyas", "Amit"];
   }
 
   handleChange(evt) {
     switch (this.searchId) {
       case 1: {
-        this.selectedprojectName = evt;
+        this.selectedproject = evt;
         console.log(evt);
         break;
       }
       case 2: {
-        this.selectedparenttaskName = evt;
+        this.selectedparenttask = evt;
         console.log(evt);
         break;
       }
       case 3: {
-        this.selecteduserName = evt;
+        this.selecteduser = evt;
         console.log(evt);
         break;
       }
@@ -72,20 +117,24 @@ export class AddtaskComponent implements OnInit {
   onSelection() {
     switch (this.searchId) {
       case 1: {
-        if (this.selectedprojectName.length > 0) {
-          this.projectName = this.selectedprojectName;
+        if (this.selectedproject.ProjectID > 0) {
+          this.projectName = this.selectedproject.ProjectName;
+          this.taskObj.Project = this.selectedproject;
         }
         break;
       }
       case 2: {
-        if (this.selectedparenttaskName.length > 0) {
-          this.parentTaskName = this.selectedparenttaskName;
+        if (this.selectedparenttask.ParentTaskID > 0) {
+          this.parentTaskName = this.selectedparenttask.ParentTaskName;
+          this.taskObj.ParentTaskID = this.selectedparenttask.ParentTaskID;
+          this.taskObj.ParentTaskName = this.selectedparenttask.ParentTaskName;
         }
         break;
       }
       case 3: {
-        if (this.selecteduserName.length > 0) {
-          this.userName = this.selecteduserName;
+        if (this.selecteduser.UserId > 0) {
+          this.userName = this.selecteduser.FirstName + " " + this.selecteduser.LastName;
+          this.taskObj.User = this.selecteduser;
         }
         break;
       }
@@ -96,9 +145,17 @@ export class AddtaskComponent implements OnInit {
   ValidateDate() {
     console.log('validate date');
     this.dateIsValid = false;
-    if (this._datePipe.transform(this.startDt, 'yyyy-MM-dd') <= this._datePipe.transform(this.endDt, 'yyyy-MM-dd')) {
+    if (this._datePipe.transform(this.taskObj.StartDate, 'yyyy-MM-dd') <= this._datePipe.transform(this.taskObj.EndDate, 'yyyy-MM-dd')) {
       this.dateIsValid = true;
     }
     console.log(this.dateIsValid);
   }
+  addTask() {
+    this._service.addTask(this.taskObj).subscribe(res => { this.responseMsg = res; });
+  }
+}
+
+class ModelView {
+  Name: string;
+  Type: any;
 }

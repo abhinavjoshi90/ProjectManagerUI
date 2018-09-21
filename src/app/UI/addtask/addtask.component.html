@@ -2,6 +2,11 @@
   <form #f="ngForm">
     <table class="table">
       <tr>
+        <td colspan="2">
+          {{responseMsg}}
+        </td>
+      </tr>
+      <tr>
         <td>
           Project:
         </td>
@@ -17,7 +22,7 @@
           Task:
         </td>
         <td>
-          <input type="text" id="tskName" name="tskName" #tskName="ngModel" [(ngModel)]="taskName" style="width:60%"
+          <input type="text" id="tskName" name="tskName" #tskName="ngModel" [(ngModel)]="taskObj.TaskName" style="width:60%"
             required />
           <div style="float:right;width:35%;padding:initial;margin:initial" class="alert alert-danger" *ngIf="tskName.touched && !tskName.valid">Task
             Name is required</div>
@@ -33,7 +38,7 @@
         <td>
           <span>0 </span>
           <input type="range" id="tskPriority" name="tskPriority" [disabled]="isPrntTskChckd" style="width:56%" min="0"
-            max="30" value="25" />
+            max="30"  [(ngModel)]="taskObj.Priority" />
           <span>30 </span>
         </td>
       </tr>
@@ -54,13 +59,13 @@
         </td>
         <td>
           <div style="width:60%">
-            <input type="date" id="prjStrtDt" name="prjStrtDt" [disabled]="isPrntTskChckd" [ngModel]="startDt|date:'yyyy-MM-dd'"
-              (ngModelChange)="startDt=$event; ValidateDate();" />
+            <input type="date" id="prjStrtDt" name="prjStrtDt" [disabled]="isPrntTskChckd" [ngModel]="taskObj.StartDate|date:'yyyy-MM-dd'"
+              (ngModelChange)="taskObj.StartDate=$event; ValidateDate();" />
             &nbsp;&nbsp;
             <div style="width:50%;float:right;">
               <span>End Date:</span> &nbsp;&nbsp;
-              <input type="date" id="prjEndDt" name="prjEndDt" [disabled]="isPrntTskChckd" [ngModel]="endDt|date:'yyyy-MM-dd'"
-                (ngModelChange)="endDt=$event;ValidateDate();" />
+              <input type="date" id="prjEndDt" name="prjEndDt" [disabled]="isPrntTskChckd" [ngModel]="taskObj.EndDate|date:'yyyy-MM-dd'"
+                (ngModelChange)="taskObj.EndDate=$event;ValidateDate();" />
             </div>            
           </div> 
           <div style="float:right;width:35%;padding:initial;margin-top:-30px;margin-bottom:0px;" class="alert alert-danger" *ngIf="!this.dateIsValid">Please
@@ -75,7 +80,7 @@
         <td>
           <input type="text" id="tskUser" name="tskUser" disabled="disabled" style="width:50%" [(ngModel)]="userName" />
           &nbsp;&nbsp;
-          <button type="button" id="btnUserSrch" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+          <button type="button" id="btnUserSrch" class="btn btn-primary" [disabled]="isPrntTskChckd" data-toggle="modal" data-target="#exampleModal"
             (click)="onUserSearchClick();" style="border-radius:50%">Search</button>
         </td>
       </tr>
@@ -84,7 +89,7 @@
         </td>
         <td>
           <div style="width:60%;text-align:right">
-            <button type="button" id="btnAddTask" [disabled]="(!f.valid || !this.dateIsValid)" class="btn btn-primary">Add Task</button>
+            <button type="button" id="btnAddTask" [disabled]="(!f.valid || !this.dateIsValid)" (click)="addTask();" class="btn btn-primary">Add Task</button>
             &nbsp;&nbsp;
             <button type="button" id="btnResTask" class="btn btn-secondary">Reset</button>
           </div>
@@ -112,8 +117,8 @@
             <input type="text" class="form-control" placeholder="Search..." name="txtUsrSrch" id="txtUsrSrch">
           </div>
           <div class="row justify-content-center mt-3" *ngFor="let obj of lstItem">
-            <input class="col-md-3" type="radio" name="rdlstItem" id="rdlstItem" (change)="handleChange(obj);">
-            <span class="col-md-9" name="lbllstItem" id="lbllstItem">{{obj}}</span>
+            <input class="col-md-3" type="radio" name="rdlstItem" id="rdlstItem" (change)="handleChange(obj.Type);">
+            <span class="col-md-9" name="lbllstItem" id="lbllstItem">{{obj.Name}}</span>
           </div>
         </div>
       </div>

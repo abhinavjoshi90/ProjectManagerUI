@@ -1,3 +1,6 @@
+import { Project } from "./Project";
+import { User } from "./User";
+
 export class Task {
     TaskID: number;
     TaskName: string;
@@ -6,4 +9,6 @@ export class Task {
     Priority: number;
     StartDate: Date;
     EndDate: Date;
+    Project :Project;
+    User:User;
 }
