@@ -11,7 +11,8 @@ const APP_ROUTES: Routes = [
     { path: '', component: AddprojectComponent },
     { path: 'addtask', component: AddtaskComponent },
     { path: 'adduser', component: AdduserComponent },
-    { path: 'viewtask', component: ViewtaskComponent }
+    { path: 'viewtask', component: ViewtaskComponent },
+    { path: 'updatetask/:id', component: AddtaskComponent },
 ]
 
 export const routing = RouterModule.forRoot(APP_ROUTES);

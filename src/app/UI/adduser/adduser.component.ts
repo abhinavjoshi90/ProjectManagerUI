@@ -8,21 +8,30 @@ import { User } from '../../Model/User';
   styleUrls: ['./adduser.component.css']
 })
 export class AdduserComponent implements OnInit {
-  
-  firstNm:string;
-  lastNm:string;
-  empId:number;
-  usrObj:User=new User();
-  ResponseMsg:string;
-  constructor(private _projectService:ProjectService) { }
- 
-  ngOnInit() {
+
+  firstNm: string;
+  lastNm: string;
+  empId: number;
+  usrObj: User = new User();
+  ResponseMsg: string;
+  lstUsers: User[];
+  constructor(private _projectService: ProjectService) { 
+    this.getallUser();
   }
 
-  addUser(){
-   this.usrObj.FirstName=this.firstNm;
-   this.usrObj.LastName=this.lastNm;
-   this.usrObj.EmployeeId=this.empId;
-   this._projectService.addUser(this.usrObj).subscribe(r=> this.ResponseMsg=r);
+  ngOnInit() {
+  }
+  
+
+  getallUser() {
+    this._projectService.getallUsers().subscribe(res => {
+      this.lstUsers = res;
+    });
+  }
+  addUser() {
+    this.usrObj.FirstName = this.firstNm;
+    this.usrObj.LastName = this.lastNm;
+    this.usrObj.EmployeeId = this.empId;
+    this._projectService.addUser(this.usrObj).subscribe(r => this.ResponseMsg = r);
   }
 }

@@ -9,7 +9,7 @@
           Project:
         </td>
         <td>
-          <input type="text" id="prjName" [(ngModel)]="projectObj.projectName" name="prjName " #prjName="ngModel" style="width:60%"
+          <input type="text" id="prjName" [(ngModel)]="projectObj.ProjectName" name="prjName " #prjName="ngModel" style="width:60%"
             required />
           <div style="float:right;width:35%;padding:initial;margin:initial" class="alert alert-danger" *ngIf="prjName.touched && !prjName.valid">Project
             Name is required</div>
@@ -56,8 +56,8 @@
         </td>
         <td>
           <div style="width:60%;text-align:right">
-            <button type="button" id="btnAddPrj" class="btn btn-primary" (click)="addProject();" [disabled]="(!f.valid || !this.dateIsValid)">Add</button>
-            &nbsp;&nbsp;
+            <button type="button" id="btnAddPrj" class="btn btn-primary" (click)="addProject();" [disabled]="(!f.valid || !this.dateIsValid)">{{buttonText}}</button>
+             &nbsp;&nbsp;
             <button type="button" id="btnAddPrj" class="btn btn-secondary">Reset</button>
           </div>
         </td>
@@ -93,7 +93,7 @@
                         Priority: <span id="prjPri">{{obj.Priority}}</span>
                       </td>
                       <td style="float: right">
-                        <button type="button" style="width:90px;" id="btnprjUpdt" class="btn btn-primary">Update</button>
+                        <button type="button" style="width:90px;" id="btnprjUpdt" (click)="updateProject(obj);" class="btn btn-primary">Update</button>
                       </td>
                     </tr>
                     <tr>

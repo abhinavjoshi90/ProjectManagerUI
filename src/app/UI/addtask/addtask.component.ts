@@ -4,6 +4,7 @@ import { Project } from '../../Model/Project';
 import { ProjectService } from '../../Service/project.service';
 import { Task } from '../../Model/Task';
 import { User } from '../../Model/User';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-addtask',
@@ -31,15 +32,41 @@ export class AddtaskComponent implements OnInit {
   lstParentTask: Task[];
   mv: ModelView;
   responseMsg: string;
-  constructor(private _datePipe: DatePipe, private _service: ProjectService) {
-    this.isPrntTskChckd = false;
-    this.dateIsValid = true;
+  taskId: number;
+  buttonText:string="";
+  isUpdate:boolean;
+  constructor(private _datePipe: DatePipe, private _service: ProjectService, private router: Router, private route: ActivatedRoute) {
     this.taskObj = new Task();
-    this.taskObj.StartDate = new Date();
-    this.taskObj.EndDate = new Date();
-    this.taskObj.EndDate.setDate(this.taskObj.StartDate.getDate() + 1);
     this.responseMsg = "";
+    this.isUpdate=false;
+    this.route.params.subscribe(p => this.taskId = p["id"]);
+    if (this.taskId === undefined) {
+      this.isPrntTskChckd = false;
+      this.dateIsValid = true;
+      this.taskObj.StartDate = new Date();
+      this.taskObj.EndDate = new Date();
+      this.taskObj.EndDate.setDate(this.taskObj.StartDate.getDate() + 1);
+      this.buttonText="Add Task";    
+    }
+    else {
+      this.buttonText="Update Task";
+      this.isUpdate=true;
+      this._service.gettaskById(this.taskId).subscribe(res => {
+        this.taskObj = res;
+        if (this.taskObj.Project != null) {
+          this.projectName = this.taskObj.Project.ProjectName;
+        }
+
+        if (this.taskObj.User != null) {
+          this.userName = this.taskObj.User.FirstName + " " + this.taskObj.User.LastName;
+          console.log(this.taskObj.ParentTaskName);
+        }
+
+        this.parentTaskName = this.taskObj.ParentTaskName;
+      });
+    }
   }
+
 
   ngOnInit() {
   }

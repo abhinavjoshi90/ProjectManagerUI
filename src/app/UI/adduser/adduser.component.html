@@ -67,12 +67,12 @@
       <td colspan="2">
         <div style="width:74%">
           <ul class="list-group">
-            <li class="list-group-item">
+            <li class="list-group-item" *ngFor="let obj of lstUsers">
               <div>
                 <table class="table">
                   <tr>
                     <td>
-                      <span id="usrFirstNm"></span>
+                      <span id="usrFirstNm">{{obj.FirstName}}</span>
                     </td>
                     <td style="float: right">
                       <button type="button" style="width:90px;" id="btnusrEdit" class="btn btn-primary">Edit</button>
@@ -80,7 +80,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <span id="usrLastNm"></span>
+                      <span id="usrLastNm">{{obj.LastName}}</span>
                     </td>
                     <td style="float: right">
                       <button type="button" style="width:90px;" id="btnusrDel" class="btn btn-danger">Delete</button>
@@ -88,7 +88,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <span id="usrEmpId"></span>
+                      <span id="usrEmpId">{{obj.EmployeeId}}</span>
                     </td>
                     <td></td>
                   </tr>

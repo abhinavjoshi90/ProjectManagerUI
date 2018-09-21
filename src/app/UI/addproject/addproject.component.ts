@@ -19,14 +19,16 @@ export class AddprojectComponent implements OnInit {
     selectedManager: User;
     Manager: string;
     lstprojects: Project[];
-    responseMsg:string;
-    constructor(private _datePipe: DatePipe, private _service: ProjectService) {       
+    responseMsg: string;
+    buttonText:string="";
+    constructor(private _datePipe: DatePipe, private _service: ProjectService) {
         this.chkSetDateVal = false;
-        this.selectedManager = new User();    
+        this.selectedManager = new User();
         this.getAllProjects();
+        this.buttonText="Add";
     }
 
-    getAllProjects(){
+    getAllProjects() {
         this._service.getallProjects().subscribe(res => this.lstprojects = res);
     }
     ngOnInit() {
@@ -67,7 +69,24 @@ export class AddprojectComponent implements OnInit {
         this._service.getallUsers().subscribe(res => this.lstItem = res);
     }
 
-    addProject(){
+    addProject() {
         this._service.addProject(this.projectObj).subscribe(res => { this.responseMsg = res; this.getAllProjects(); });
+    }
+
+    updateProject(obj) {
+        this.projectObj = obj;
+        if (obj.Manager != null) {
+            this.Manager = obj.Manager.FirstName + " " + obj.Manager.LastName;
+        }
+        else{
+            this.Manager="";
+        }
+        if (obj.StartDate != null && obj.EndDate != null) {
+            this.chkSetDateVal = true;
+        }
+        else{
+            this.chkSetDateVal=false;
+        }
+        this.buttonText="Update";
     }
 }

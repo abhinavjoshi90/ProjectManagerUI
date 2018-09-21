@@ -10,9 +10,9 @@ import { Project } from '../Model/Project';
   providedIn: 'root'
 })
 export class ProjectService {
-  
+
   apiBaseUrl: string = "http://localhost/ProjectManager.Service/api/";
- 
+
   constructor(private _http: HttpClient) { }
 
   addUser(obj: User): Observable<any> {
@@ -27,15 +27,18 @@ export class ProjectService {
     return this._http.get(this.apiBaseUrl + "getallprojects").pipe(map(res => res));
   }
 
-  getallUsers():Observable<any>{
-    return this._http.get(this.apiBaseUrl+"getallusers").pipe(map(res => res));
+  getallUsers(): Observable<any> {
+    return this._http.get(this.apiBaseUrl + "getallusers").pipe(map(res => res));
   }
 
-  addProject(obj:Project):Observable<any>{
+  addProject(obj: Project): Observable<any> {
     return this._http.post(this.apiBaseUrl + "addproject", obj).pipe(map(res => res));
   }
 
-  addTask(obj:Task):Observable<any>{
+  addTask(obj: Task): Observable<any> {
     return this._http.post(this.apiBaseUrl + "addtask", obj).pipe(map(res => res));
+  }
+  gettaskById(id: number): Observable<any> {
+    return this._http.get(this.apiBaseUrl + "gettaskbyid/" + id).pipe(map(res => res));
   }
 }

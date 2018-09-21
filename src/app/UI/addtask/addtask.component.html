@@ -14,7 +14,7 @@
           <input type="text" name="tskPrj" id="tskPrj" [(ngModel)]="projectName" disabled="disabled" style="width:50%" />
           &nbsp;&nbsp;
           <button type="button" id="btnPrjSrch" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-            (click)="onPrjSearchClick();" style="border-radius:50%">Search</button>
+            (click)="onPrjSearchClick();" [disabled]="isUpdate" style="border-radius:50%">Search</button>
         </td>
       </tr>
       <tr>
@@ -89,7 +89,7 @@
         </td>
         <td>
           <div style="width:60%;text-align:right">
-            <button type="button" id="btnAddTask" [disabled]="(!f.valid || !this.dateIsValid)" (click)="addTask();" class="btn btn-primary">Add Task</button>
+            <button type="button" id="btnAddTask" [disabled]="(!f.valid || !this.dateIsValid)" (click)="addTask();" class="btn btn-primary">{{buttonText}}</button>
             &nbsp;&nbsp;
             <button type="button" id="btnResTask" class="btn btn-secondary">Reset</button>
           </div>
