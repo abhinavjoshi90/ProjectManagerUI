@@ -12,7 +12,7 @@ import { DateSortPipe } from '../../Pipe/datesort.pipe';
   selector: 'app-viewtask',
   templateUrl: './viewtask.component.html',
   styleUrls: ['./viewtask.component.css'],
-  providers: [SortPipe,DateSortPipe]
+  providers: [SortPipe, DateSortPipe]
 })
 export class ViewtaskComponent implements OnInit {
   searchTitle: string;
@@ -23,10 +23,15 @@ export class ViewtaskComponent implements OnInit {
   lstTasks: Task[];
   templstTasks: Task[];
 
-  constructor(private _projservice: ProjectService, private _router: Router, 
-    private _datePipe: DatePipe , private _sortPipe:SortPipe,private _dateSort:DateSortPipe) {
+  constructor(private _projservice: ProjectService, private _router: Router,
+    private _datePipe: DatePipe, private _sortPipe: SortPipe, private _dateSort: DateSortPipe) {
     this.lstTasks = [];
     this.templstTasks = [];
+    this.getAllTasks();
+  }
+
+
+  getAllTasks() {
     this._projservice.getallTasks().subscribe(res => {
       this.templstTasks = res;
       this.templstTasks.forEach(task => {
@@ -36,7 +41,6 @@ export class ViewtaskComponent implements OnInit {
       });
     })
   }
-
   ngOnInit() {
   }
 
@@ -75,15 +79,34 @@ export class ViewtaskComponent implements OnInit {
     this._router.navigate(['updatetask', obj.TaskID]);
   }
 
+  endTask(obj) {
+
+    if (this._datePipe.transform(obj.StartDate, 'yyyy-MM-dd') > this._datePipe.transform(new Date(), 'yyyy-MM-dd')) {
+      obj.StartDate = this._datePipe.transform(new Date(), 'yyyy-MM-dd');
+    }
+
+    obj.EndDate = this._datePipe.transform(new Date(), 'yyyy-MM-dd');
+
+    this._projservice.addTask(obj).subscribe(r => {
+      if (this.selectedproject != null) {
+        this._projservice.getTaskByProjectId(this.selectedproject.ProjectID).subscribe(res => this.lstTasks = res);
+      }
+      else {
+        this.lstTasks=[];
+        this.getAllTasks();
+      }
+    })
+  }
+
   sortByPriority() {
-    this.lstTasks=this._sortPipe.transform(this.lstTasks,"Priority");
-   }   
+    this.lstTasks = this._sortPipe.transform(this.lstTasks, "Priority");
+  }
 
   sortByStarDate() {
-    this.lstTasks=this._dateSort.transform(this.lstTasks,"StartDate");
+    this.lstTasks = this._dateSort.transform(this.lstTasks, "StartDate");
   }
   sortByEndDate() {
-    this.lstTasks=this._dateSort.transform(this.lstTasks,"EndDate");
+    this.lstTasks = this._dateSort.transform(this.lstTasks, "EndDate");
   }
 }
 

@@ -12,4 +12,5 @@ export class Task {
     Project :Project;
     User:User;
     IsParentTask:boolean;
+    Status:string;
 }

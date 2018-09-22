@@ -47,6 +47,7 @@ export class ProjectService {
   }
 
   addTask(obj: Task): Observable<any> {
+    console.log(obj.EndDate)
     return this._http.post(this.apiBaseUrl + "addtask", obj).pipe(map(res => res));
   }
 
