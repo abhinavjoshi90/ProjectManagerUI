@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Project } from '../../Model/Project';
 import { ProjectService } from '../../Service/project.service';
 import { Task } from '../../Model/Task';
 import { User } from '../../Model/User';
 import { Router, ActivatedRoute } from '@angular/router';
+import { fromEvent, Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-addtask',
   templateUrl: './addtask.component.html',
   styleUrls: ['./addtask.component.css']
 })
-export class AddtaskComponent implements OnInit {
+export class AddtaskComponent implements OnInit, AfterViewInit {
   taskObj: Task;
   lstItem: ModelView[] = [];
   searchTitle: string;
@@ -33,44 +35,93 @@ export class AddtaskComponent implements OnInit {
   mv: ModelView;
   responseMsg: string;
   taskId: number;
-  buttonText:string="";
-  isUpdate:boolean;
+  buttonText: string = "";
+  isUpdate: boolean;
+  //isParentTsk:boolean;
   constructor(private _datePipe: DatePipe, private _service: ProjectService, private router: Router, private route: ActivatedRoute) {
     this.taskObj = new Task();
     this.responseMsg = "";
-    this.isUpdate=false;
-    this.route.params.subscribe(p => this.taskId = p["id"]);
+    this.isUpdate = false;
+    this.route.params.subscribe(p => {
+      this.taskId = p["id"];
+      // this.isParentTsk = p["pt"];
+    });
     if (this.taskId === undefined) {
       this.isPrntTskChckd = false;
       this.dateIsValid = true;
       this.taskObj.StartDate = new Date();
       this.taskObj.EndDate = new Date();
       this.taskObj.EndDate.setDate(this.taskObj.StartDate.getDate() + 1);
-      this.buttonText="Add Task";    
+      this.buttonText = "Add Task";
     }
     else {
-      this.buttonText="Update Task";
-      this.isUpdate=true;
+      this.buttonText = "Update Task";
+      this.isUpdate = true;
+
+      //if (!this.isParentTsk) {
       this._service.gettaskById(this.taskId).subscribe(res => {
         this.taskObj = res;
         if (this.taskObj.Project != null) {
           this.projectName = this.taskObj.Project.ProjectName;
         }
-
         if (this.taskObj.User != null) {
           this.userName = this.taskObj.User.FirstName + " " + this.taskObj.User.LastName;
           console.log(this.taskObj.ParentTaskName);
         }
-
         this.parentTaskName = this.taskObj.ParentTaskName;
       });
+      // }
     }
   }
 
 
   ngOnInit() {
   }
-
+  ngAfterViewInit() {
+    fromEvent(document.getElementById("txtUsrSrch"), "input").pipe(map((e: KeyboardEvent) => (<HTMLInputElement>e.target).value)
+      , debounceTime(100)
+      , distinctUntilChanged()
+      , switchMap((searchTerm) =>
+        this.searchText(searchTerm)
+      ))
+      .subscribe(c => {
+        console.log(c);
+        this.lstItem = [];
+        switch (this.searchId) {
+          case 1: {
+            this.lstProjects = c;
+            this.lstProjects.forEach(project => {
+              this.mv = new ModelView();
+              this.mv.Name = project.ProjectName;
+              this.mv.Type = project;
+              this.lstItem.push(this.mv);
+              // console.log((project.ProjectName));
+            });
+            break;
+          }
+          case 2: {
+            this.lstParentTask = c;
+            this.lstParentTask.forEach(parntTask => {
+              this.mv = new ModelView();
+              this.mv.Name = parntTask.TaskName;
+              this.mv.Type = parntTask;
+              this.lstItem.push(this.mv);
+            });
+            break;
+          }
+          case 3: {
+            this.lstUsers = c;
+            this.lstUsers.forEach(user => {
+              this.mv = new ModelView();
+              this.mv.Name = user.FirstName + " " + user.LastName;
+              this.mv.Type = user;
+              this.lstItem.push(this.mv);
+            });
+            break;
+          }
+        }
+      })
+  }
   onPrjSearchClick() {
     this.lstItem = [];
     this.searchId = 1;
@@ -93,9 +144,9 @@ export class AddtaskComponent implements OnInit {
     this._service.getallTasks().subscribe(res => {
       this.lstParentTask = res;
       this.lstParentTask.forEach(parntTask => {
-        if (parntTask.TaskID == 0) {
+        if (parntTask.IsParentTask) {
           this.mv = new ModelView();
-          this.mv.Name = parntTask.ParentTaskName;
+          this.mv.Name = parntTask.TaskName;
           this.mv.Type = parntTask;
           this.lstItem.push(this.mv);
         }
@@ -151,10 +202,10 @@ export class AddtaskComponent implements OnInit {
         break;
       }
       case 2: {
-        if (this.selectedparenttask.ParentTaskID > 0) {
-          this.parentTaskName = this.selectedparenttask.ParentTaskName;
-          this.taskObj.ParentTaskID = this.selectedparenttask.ParentTaskID;
-          this.taskObj.ParentTaskName = this.selectedparenttask.ParentTaskName;
+        if (this.selectedparenttask.TaskID > 0) {
+          this.parentTaskName = this.selectedparenttask.TaskName;
+          this.taskObj.ParentTaskID = this.selectedparenttask.TaskID;
+          this.taskObj.ParentTaskName = this.selectedparenttask.TaskName;
         }
         break;
       }
@@ -177,8 +228,41 @@ export class AddtaskComponent implements OnInit {
     }
     console.log(this.dateIsValid);
   }
+
+  searchText(searchTerm): Observable<any> {
+    switch (this.searchId) {
+      case 1: {
+        return this._service.getProjectByName(searchTerm);
+      }
+      case 2:
+      {
+        return this._service.getparentTaskByName(searchTerm);
+      }
+      case 3: {
+        return this._service.getUserByName(searchTerm);
+
+      }
+    }
+  }
+
   addTask() {
-    this._service.addTask(this.taskObj).subscribe(res => { this.responseMsg = res; });
+    if (!this.isPrntTskChckd) {
+      this._service.addTask(this.taskObj).subscribe(res => { this.responseMsg = res; });
+    }
+    else {
+      this._service.addparentTask(this.taskObj).subscribe(res => this.responseMsg = res);
+    }
+  }
+
+  checkChange() {
+    this.taskObj.StartDate = null;
+    this.taskObj.EndDate = null;
+    this.taskObj.Priority = null;
+    this.taskObj.ParentTaskID = 0;
+    this.taskObj.ParentTaskName = "";
+    this.taskObj.User = null;
+    this.parentTaskName = "";
+    this.userName = "";
   }
 }
 

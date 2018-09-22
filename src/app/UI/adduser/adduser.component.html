@@ -12,7 +12,7 @@
         First Name:
       </td>
       <td style="width:60%">
-        <input type="text" id="usrFirstNm" style="width:500px;" name="usrFirstNm" #firstName="ngModel" [(ngModel)]="firstNm"  required/>
+        <input type="text" id="usrFirstNm" style="width:500px;" name="usrFirstNm" #firstName="ngModel" [(ngModel)]="usrObj.FirstName"  required/>
         <div style="float:right;width:35%;padding:initial;margin:initial" class="alert alert-danger" *ngIf="firstName.touched && !firstName.valid">First
             Name is required</div>
           <br>
@@ -23,7 +23,7 @@
         Last Name:
       </td>
       <td style="width:60%">
-        <input type="text" id="usrLastNm" style="width:500px;" name="usrLadtNm" #lastName="ngModel" [(ngModel)]="lastNm"  required />
+        <input type="text" id="usrLastNm" style="width:500px;" name="usrLadtNm" #lastName="ngModel" [(ngModel)]="usrObj.LastName"  required />
         <div style="float:right;width:35%;padding:initial;margin:initial" class="alert alert-danger" *ngIf="lastName.touched && !lastName.valid">Last
             Name is required</div>
       </td>
@@ -33,7 +33,7 @@
         Employee ID:        
       </td>
       <td>
-        <input type="text" id="usrEmpId" name="usrEmpId" #eId="ngModel" [(ngModel)]="empId" style="width:150px;" required/>
+        <input type="text" id="usrEmpId" name="usrEmpId" #eId="ngModel" [(ngModel)]="usrObj.EmployeeId" style="width:150px;" required/>
         <div style="float:right;width:35%;padding:initial;margin:initial" class="alert alert-danger" *ngIf="eId.touched && !eId.valid">Employee
             ID is required</div>
       </td>
@@ -43,22 +43,22 @@
       </td>
       <td>
         <div style="width:60%;text-align:right">
-          <button type="button" id="btnAddUser" (click)="addUser();" [disabled]="!f.valid" class="btn btn-primary">Add</button>
+          <button type="button" id="btnAddUser" (click)="addUser();" [disabled]="!f.valid" class="btn btn-primary">{{buttonText}}</button>
           &nbsp;&nbsp;
-          <button type="button" id="btnResUser" class="btn btn-secondary">Reset</button>
+          <button type="button" id="btnResUser" (click)="f.resetForm();" class="btn btn-secondary">Reset</button>
         </div>
       </td>
     </tr>
     <tr>
       <td colspan="2">
         <div style="width:92%;">
-          <input type="text" id="srchProject" style="width:25%" placeholder="Search..." />
+          <input type="text" id="srchProject" style="width:25%" name="srchProject"  [(ngModel)]="searchText" placeholder="Search..." />
           &nbsp;&nbsp;
           <div style="width:55%;float:right">
             Sort :
-            <button type="button" id="btnSortUsrFNm" class="btn btn-primary">First Name</button> &nbsp;&nbsp;
-            <button type="button" id="btnSortUsrLNm" class="btn btn-primary">Last Name</button> &nbsp;&nbsp;
-            <button type="button" id="btnSortUsrId" class="btn btn-primary">Id</button> &nbsp;&nbsp;
+            <button type="button" id="btnSortUsrFNm" (click)="SortByFN();" class="btn btn-primary">First Name</button> &nbsp;&nbsp;
+            <button type="button" id="btnSortUsrLNm" (click)="SortByLN();" class="btn btn-primary">Last Name</button> &nbsp;&nbsp;
+            <button type="button" id="btnSortUsrId"  (click)="SortByID();" class="btn btn-primary">Id</button> &nbsp;&nbsp;
           </div>
         </div>
       </td>
@@ -75,7 +75,7 @@
                       <span id="usrFirstNm">{{obj.FirstName}}</span>
                     </td>
                     <td style="float: right">
-                      <button type="button" style="width:90px;" id="btnusrEdit" class="btn btn-primary">Edit</button>
+                      <button type="button" style="width:90px;" id="btnusrEdit" (click)="edit(obj);" class="btn btn-primary">Edit</button>
                     </td>
                   </tr>
                   <tr>
@@ -83,7 +83,7 @@
                       <span id="usrLastNm">{{obj.LastName}}</span>
                     </td>
                     <td style="float: right">
-                      <button type="button" style="width:90px;" id="btnusrDel" class="btn btn-danger">Delete</button>
+                      <button type="button" style="width:90px;" id="btnusrDel" (click)="delete(obj);" class="btn btn-danger">Delete</button>
                     </td>
                   </tr>
                   <tr>

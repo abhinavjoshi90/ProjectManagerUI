@@ -27,7 +27,7 @@
           <div style="float:right;width:35%;padding:initial;margin:initial" class="alert alert-danger" *ngIf="tskName.touched && !tskName.valid">Task
             Name is required</div>
           <br>
-          <input type="checkbox" name="chkParent" id="chkParent" [(ngModel)]="isPrntTskChckd" />
+          <input type="checkbox" name="chkParent" id="chkParent" [disabled]="isUpdate" (change)="checkChange();" [(ngModel)]="isPrntTskChckd" />
           &nbsp;<label for="chkParent">Parent Task</label>
         </td>
       </tr>
@@ -91,7 +91,7 @@
           <div style="width:60%;text-align:right">
             <button type="button" id="btnAddTask" [disabled]="(!f.valid || !this.dateIsValid)" (click)="addTask();" class="btn btn-primary">{{buttonText}}</button>
             &nbsp;&nbsp;
-            <button type="button" id="btnResTask" class="btn btn-secondary">Reset</button>
+            <button type="button" id="btnResTask" (click)="f.resetForm();"  class="btn btn-secondary">Reset</button>
           </div>
         </td>
       </tr>

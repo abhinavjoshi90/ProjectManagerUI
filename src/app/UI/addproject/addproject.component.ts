@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Project } from '../../Model/Project';
 import { ProjectService } from '../../Service/project.service';
 import { User } from '../../Model/User';
+import { fromEvent } from 'rxjs';
+import { map, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { SortPipe } from '../../Pipe/sort.pipe';
+import { DateSortPipe } from '../../Pipe/datesort.pipe';
 //declare var $:any;
 @Component({
     selector: 'app-addproject',
@@ -10,7 +14,7 @@ import { User } from '../../Model/User';
     styleUrls: ['./addproject.component.css'],
     providers: [DatePipe]
 })
-export class AddprojectComponent implements OnInit {
+export class AddprojectComponent implements OnInit, AfterViewInit {
 
     projectObj: Project = new Project();
     chkSetDateVal: boolean;
@@ -20,18 +24,44 @@ export class AddprojectComponent implements OnInit {
     Manager: string;
     lstprojects: Project[];
     responseMsg: string;
-    buttonText:string="";
-    constructor(private _datePipe: DatePipe, private _service: ProjectService) {
+    buttonText: string = "";
+    constructor(private _datePipe: DatePipe, private _service: ProjectService, private _sortPipe: SortPipe,
+        private _dateSort: DateSortPipe) {
         this.chkSetDateVal = false;
         this.selectedManager = new User();
         this.getAllProjects();
-        this.buttonText="Add";
+        this.buttonText = "Add";
     }
 
     getAllProjects() {
         this._service.getallProjects().subscribe(res => this.lstprojects = res);
     }
     ngOnInit() {
+    }
+
+    ngAfterViewInit() {
+
+        fromEvent(document.getElementById("srchProject"), "input").pipe(map((e: KeyboardEvent) => (<HTMLInputElement>e.target).value)
+            , debounceTime(100)
+            , distinctUntilChanged()
+            , switchMap((searchTerm) =>
+                this._service.getProjectByName(searchTerm)
+            ))
+            .subscribe(c => {
+                this.lstprojects = c;
+            });
+
+        fromEvent(document.getElementById("txtUsrSrch"), "input").pipe(map((e: KeyboardEvent) => (<HTMLInputElement>e.target).value)
+            , debounceTime(100)
+            , distinctUntilChanged()
+            , switchMap((searchTerm) =>
+                this._service.getUserByName(searchTerm)
+            ))
+            .subscribe(c => {
+                // console.log(c);
+                this.lstItem = c;
+            });
+
     }
     checkChange() {
         this.dateIsValid = true;
@@ -78,15 +108,29 @@ export class AddprojectComponent implements OnInit {
         if (obj.Manager != null) {
             this.Manager = obj.Manager.FirstName + " " + obj.Manager.LastName;
         }
-        else{
-            this.Manager="";
+        else {
+            this.Manager = "";
         }
         if (obj.StartDate != null && obj.EndDate != null) {
             this.chkSetDateVal = true;
         }
-        else{
-            this.chkSetDateVal=false;
+        else {
+            this.chkSetDateVal = false;
         }
-        this.buttonText="Update";
+        this.buttonText = "Update";
+    }
+
+    SortByStartDate() {
+        this.lstprojects = this._dateSort.transform(this.lstprojects, "StartDate");
+    }
+
+    SortByEndDate() {
+        this.lstprojects = this._dateSort.transform(this.lstprojects, "EndDate");
+    }
+    SortByPriority() {
+        this.lstprojects = this._sortPipe.transform(this.lstprojects, "Priority");
+    }
+    SortByCompleted() {
+        this.lstprojects = this._sortPipe.transform(this.lstprojects, "CompletedTasks");
     }
 }

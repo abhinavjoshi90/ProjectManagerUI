@@ -11,4 +11,5 @@ export class Task {
     EndDate: Date;
     Project :Project;
     User:User;
+    IsParentTask:boolean;
 }

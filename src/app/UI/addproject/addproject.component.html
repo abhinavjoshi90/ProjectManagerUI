@@ -58,7 +58,7 @@
           <div style="width:60%;text-align:right">
             <button type="button" id="btnAddPrj" class="btn btn-primary" (click)="addProject();" [disabled]="(!f.valid || !this.dateIsValid)">{{buttonText}}</button>
              &nbsp;&nbsp;
-            <button type="button" id="btnAddPrj" class="btn btn-secondary">Reset</button>
+            <button type="button" id="btnAddPrj" (click)="f.resetForm();"  class="btn btn-secondary">Reset</button>
           </div>
         </td>
       </tr>
@@ -72,10 +72,10 @@
           Sort By:
         </td>
         <td>
-          <button type="button" id="btnSortStrtDt" class="btn btn-primary">Start Date</button> &nbsp;&nbsp;
-          <button type="button" id="btnSortEndDt" class="btn btn-primary">End Date</button> &nbsp;&nbsp;
-          <button type="button" id="btnSortPri" class="btn btn-primary">Priority</button> &nbsp;&nbsp;
-          <button type="button" id="btnSortCmp" class="btn btn-primary">Completed</button> &nbsp;&nbsp;
+          <button type="button" id="btnSortStrtDt" (click)="SortByStartDate();" class="btn btn-primary">Start Date</button> &nbsp;&nbsp;
+          <button type="button" id="btnSortEndDt" (click)="SortByEndDate();" class="btn btn-primary">End Date</button> &nbsp;&nbsp;
+          <button type="button" id="btnSortPri" (click)="SortByPriority();" class="btn btn-primary">Priority</button> &nbsp;&nbsp;
+          <button type="button" id="btnSortCmp" (click)="SortByCompleted();" class="btn btn-primary">Completed</button> &nbsp;&nbsp;
         </td>
       </tr>
       <tr>

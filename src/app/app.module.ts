@@ -9,13 +9,17 @@ import { ViewtaskComponent } from './UI/viewtask/viewtask.component';
 import { routing } from 'src/app/app.router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { SortPipe } from './Pipe/sort.pipe';
+import { DateSortPipe } from './Pipe/datesort.pipe';
 @NgModule({
   declarations: [
     AppComponent,
     AddprojectComponent,
     AddtaskComponent,
     AdduserComponent,
-    ViewtaskComponent
+    ViewtaskComponent,
+    SortPipe,
+    DateSortPipe
   ],
   imports: [
     BrowserModule,
@@ -24,7 +28,7 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     HttpClientModule 
   ], 
-  providers: [DatePipe],
+  providers: [DatePipe,SortPipe,DateSortPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
