@@ -125,7 +125,7 @@ export class AddtaskComponent implements OnInit, AfterViewInit {
   onPrjSearchClick() {
     this.lstItem = [];
     this.searchId = 1;
-    this.searchTitle = "Search Projects";
+    this.searchTitle = "Search Project(s)";
     this._service.getallProjects().subscribe(res => {
       this.lstProjects = res;
       this.lstProjects.forEach(project => {
@@ -140,7 +140,7 @@ export class AddtaskComponent implements OnInit, AfterViewInit {
   onPrntTskSearchClick() {
     this.lstItem = [];
     this.searchId = 2;
-    this.searchTitle = "Search Parent Tasks";
+    this.searchTitle = "Search Parent Task(s)";
     this._service.getallTasks().subscribe(res => {
       this.lstParentTask = res;
       this.lstParentTask.forEach(parntTask => {
@@ -157,7 +157,7 @@ export class AddtaskComponent implements OnInit, AfterViewInit {
   onUserSearchClick() {
     this.lstItem = [];
     this.searchId = 3;
-    this.searchTitle = "Search Users";
+    this.searchTitle = "Search User(s)";
     this._service.getallUsers().subscribe(res => {
       this.lstUsers = res;
       this.lstUsers.forEach(user => {
